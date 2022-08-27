@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
+import moment from "moment";
+import postService from "libs/postService";
 import Pagination from "components/pagination";
 
 export default function Posts(props: { posts: any[] }) {
@@ -27,9 +29,11 @@ export default function Posts(props: { posts: any[] }) {
             <tr key={post.id}>
               <td className="td_number">{post.id}</td>
               <td className="td_title">{post.title}</td>
-              <td className="td_writer">{post.userId}</td>
-              <td className="td_date">2022.01.01</td>
-              <td className="td_look">0</td>
+              <td className="td_writer">{post.user.name}</td>
+              <td className="td_date">
+                {moment(post.date).format("YY.MM.DD")}
+              </td>
+              <td className="td_look">{post.look}</td>
             </tr>
           ))}
         </tbody>
@@ -45,9 +49,7 @@ export default function Posts(props: { posts: any[] }) {
 }
 
 export async function getServerSideProps() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await res.json();
-
+  const posts = await postService.fetchPosts();
   console.log(posts);
 
   return {
