@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-export default function Posts() {
+export default function Posts(props: { posts: any[] }) {
+  const { posts } = props;
+
   return (
     <Container>
       <h1>게시판</h1>
@@ -16,31 +18,30 @@ export default function Posts() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="td_number">3</td>
-            <td className="td_title">test</td>
-            <td className="td_writer">test</td>
-            <td className="td_date">2022.01.10</td>
-            <td className="td_look">1</td>
-          </tr>
-          <tr>
-            <td className="td_number">2</td>
-            <td className="td_title">test</td>
-            <td className="td_writer">test</td>
-            <td className="td_date">2022.01.03</td>
-            <td className="td_look">4</td>
-          </tr>
-          <tr>
-            <td className="td_number">1</td>
-            <td className="td_title">test</td>
-            <td className="td_writer">test</td>
-            <td className="td_date">2022.01.01</td>
-            <td className="td_look">2</td>
-          </tr>
+          {posts.map((post) => (
+            <tr key={post.id}>
+              <td className="td_number">{post.id}</td>
+              <td className="td_title">{post.title}</td>
+              <td className="td_writer">{post.userId}</td>
+              <td className="td_date">2022.01.01</td>
+              <td className="td_look">0</td>
+            </tr>
+          ))}
         </tbody>
       </PostList>
     </Container>
   );
+}
+
+export async function getServerSideProps() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
+
+  console.log(posts);
+
+  return {
+    props: { posts },
+  };
 }
 
 const Container = styled.div`
@@ -51,8 +52,10 @@ const Container = styled.div`
 `;
 const PostList = styled.table`
   width: 80%;
+  margin: 20px 0 50px;
   border-collapse: collapse;
   text-align: center;
+  cursor: default;
 
   thead {
     border-top: 1px solid #bbb;
