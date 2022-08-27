@@ -1,7 +1,12 @@
 import styled from "styled-components";
+import { useState } from "react";
+import Pagination from "components/pagination";
 
 export default function Posts(props: { posts: any[] }) {
   const { posts } = props;
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 20;
+  const offset = (currentPage - 1) * limit;
 
   return (
     <Container>
@@ -18,7 +23,7 @@ export default function Posts(props: { posts: any[] }) {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post) => (
+          {posts.slice(offset, offset + limit).map((post) => (
             <tr key={post.id}>
               <td className="td_number">{post.id}</td>
               <td className="td_title">{post.title}</td>
@@ -29,6 +34,12 @@ export default function Posts(props: { posts: any[] }) {
           ))}
         </tbody>
       </PostList>
+
+      <Pagination
+        totalPage={Math.ceil(posts.length / limit)}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </Container>
   );
 }
