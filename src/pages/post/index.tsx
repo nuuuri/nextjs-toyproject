@@ -53,7 +53,6 @@ export default function Post(props: { posts: any[] }) {
 
 export async function getServerSideProps() {
   const posts = await postService.fetchPosts();
-  console.log(posts);
 
   return {
     props: { posts },

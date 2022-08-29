@@ -7,6 +7,12 @@ class PostService {
       .then((res) => res.json())
       .then((data) => data.data);
   }
+
+  async fetchPost(id: string | string[] | undefined) {
+    return fetch(`${this.POST_URL}/${id}`, { method: "GET" })
+      .then((res) => res.json())
+      .then((data) => data.data);
+  }
 }
 
 export default new PostService();
