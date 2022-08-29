@@ -8,7 +8,7 @@ export default function Header() {
         <Link href="/">
           <a>홈</a>
         </Link>
-        <Link href="/posts">
+        <Link href="/post">
           <a>게시판</a>
         </Link>
       </Menu>

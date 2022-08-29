@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import Link from "next/link";
 import { useState } from "react";
 import moment from "moment";
 import postService from "libs/postService";
 import Pagination from "components/pagination";
 
-export default function Posts(props: { posts: any[] }) {
+export default function Post(props: { posts: any[] }) {
   const { posts } = props;
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 20;
@@ -28,7 +29,9 @@ export default function Posts(props: { posts: any[] }) {
           {posts.slice(offset, offset + limit).map((post) => (
             <tr key={post.id}>
               <td className="td_number">{post.id}</td>
-              <td className="td_title">{post.title}</td>
+              <Link href={`/post/${post.id}`}>
+                <td className="td_title">{post.title}</td>
+              </Link>
               <td className="td_writer">{post.user.name}</td>
               <td className="td_date">
                 {moment(post.date).format("YY.MM.DD")}
