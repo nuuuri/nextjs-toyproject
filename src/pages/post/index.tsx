@@ -1,15 +1,19 @@
 import styled from "styled-components";
+import useSWR from "swr";
 import Link from "next/link";
 import { useState } from "react";
 import moment from "moment";
-import postService from "libs/postService";
+import { fetcher } from "libs/service";
 import Pagination from "components/pagination";
 
-export default function Post(props: { posts: any[] }) {
-  const { posts } = props;
+export default function Post() {
+  const { data: posts, error } = useSWR(`/api/post`, fetcher);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 20;
   const offset = (currentPage - 1) * limit;
+
+  if (error) return <div>failed to load</div>;
+  if (!posts) return <div>loading...</div>;
 
   return (
     <Container>
@@ -26,7 +30,7 @@ export default function Post(props: { posts: any[] }) {
           </tr>
         </thead>
         <tbody>
-          {posts.slice(offset, offset + limit).map((post) => (
+          {posts.slice(offset, offset + limit).map((post: any) => (
             <tr key={post.id}>
               <td className="td_number">{post.id}</td>
               <Link href={`/post/${post.id}`}>
@@ -49,14 +53,6 @@ export default function Post(props: { posts: any[] }) {
       />
     </Container>
   );
-}
-
-export async function getServerSideProps() {
-  const posts = await postService.fetchPosts();
-
-  return {
-    props: { posts },
-  };
 }
 
 const Container = styled.div`

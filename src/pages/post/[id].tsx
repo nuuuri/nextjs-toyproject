@@ -1,12 +1,17 @@
 import styled from "styled-components";
-import { GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import moment from "moment";
-import postService from "libs/postService";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import { fetcher } from "libs/service";
 
-export default function PostDetail(props: { post: any }) {
-  const { post } = props;
-  console.log(post);
+export default function PostDetail() {
+  const router = useRouter();
+  const { data: post, error } = useSWR(`/api/post/${router.query.id}`, fetcher);
+
+  if (error) return <div>failed to load</div>;
+  if (!post) return <div>loading...</div>;
+
   return (
     <Container>
       <PostHeader>
@@ -33,13 +38,6 @@ export default function PostDetail(props: { post: any }) {
       <PostContent>{post.content}</PostContent>
     </Container>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { id } = context.query;
-  const post = await postService.fetchPost(id);
-
-  return { props: { post: post } };
 }
 
 const Container = styled.div`
