@@ -4,10 +4,19 @@ import moment from "moment";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetcher } from "libs/service";
+import { useEffect } from "react";
 
 export default function PostDetail() {
   const router = useRouter();
   const { data: post, error } = useSWR(`/api/post/${router.query.id}`, fetcher);
+
+  useEffect(() => {
+    async function revalidate() {
+      await fetch("/api/post/revalidate?secret=this_is_revalidate_token");
+    }
+
+    revalidate();
+  }, [post]);
 
   if (error) return <div>failed to load</div>;
   if (!post) return <div>loading...</div>;

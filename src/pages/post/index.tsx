@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import useSWR from "swr";
 import Link from "next/link";
 import { useState } from "react";
 import moment from "moment";
-import { fetcher } from "libs/service";
 import Pagination from "components/pagination";
+import client from "libs/client";
+import { makeSerializable } from "libs/service";
 
-export default function Post() {
-  const { data: posts, error } = useSWR(`/api/post`, fetcher);
+export default function Post(props: { posts: any[] }) {
+  const { posts } = props;
+
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 20;
   const offset = (currentPage - 1) * limit;
 
-  if (error) return <div>failed to load</div>;
-  if (!posts) return <div>loading...</div>;
+  if (!posts) return <></>;
 
   return (
     <Container>
@@ -53,6 +53,21 @@ export default function Post() {
       />
     </Container>
   );
+}
+
+export async function getStaticProps() {
+  const posts = await client.post.findMany({
+    orderBy: {
+      id: "desc",
+    },
+    include: {
+      user: {
+        select: { name: true },
+      },
+    },
+  });
+
+  return { props: { posts: makeSerializable(posts) }, revalidate: 10 };
 }
 
 const Container = styled.div`
