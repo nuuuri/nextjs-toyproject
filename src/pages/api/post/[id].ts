@@ -5,32 +5,41 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const {
-    query: { id },
-    method,
-  } = req;
+  const postId = req.query.id;
 
-  switch (method) {
+  switch (req.method) {
     case "GET":
       try {
-        const post = await client.post.findUnique({
-          where: {
-            id: parseInt(id as string),
-          },
-          include: {
-            user: {
-              select: {
-                name: true,
-              },
-            },
-          },
-        });
-        return res.status(200).json({ success: true, data: post });
+        return handleGET(postId as string, res);
       } catch (error) {
         return res.status(400).json({ success: false });
       }
 
+    case "PUT":
+
     default:
       res.status(400).json({ success: false });
   }
+}
+
+async function handleGET(id: string, res: NextApiResponse) {
+  const post = await client.post.update({
+    where: {
+      id: parseInt(id),
+    },
+    data: {
+      look: {
+        increment: 1,
+      },
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  res.status(200).json({ success: true, data: post });
 }
