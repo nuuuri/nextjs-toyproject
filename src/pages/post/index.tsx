@@ -46,11 +46,17 @@ export default function Post(props: { posts: any[] }) {
         </tbody>
       </PostList>
 
-      <Pagination
-        totalPage={Math.ceil(posts.length / limit)}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      <Footer>
+        <div />
+        <Pagination
+          totalPage={Math.ceil(posts.length / limit)}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+        <Link href="/post/write">
+          <button className="write_button">글쓰기</button>
+        </Link>
+      </Footer>
     </Container>
   );
 }
@@ -78,7 +84,7 @@ const Container = styled.div`
 `;
 const PostList = styled.table`
   width: 80%;
-  margin: 20px 0 50px;
+  margin: 20px 0 20px;
   border-collapse: collapse;
   text-align: center;
   cursor: default;
@@ -122,5 +128,17 @@ const PostList = styled.table`
 
   .t_c {
     text-align: center;
+  }
+`;
+const Footer = styled.div`
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+
+  .write_button {
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    background: #fff;
+    cursor: pointer;
   }
 `;
