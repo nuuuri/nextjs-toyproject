@@ -1,16 +1,31 @@
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function PostWrite() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value);
   };
 
-  const submit = () => {};
+  const submit = async () => {
+    if (loading) return;
+
+    const userId = 123;
+    const data = { userId, title, content };
+    setLoading(true);
+
+    await fetch("/api/post", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }).then(() => router.push("/post"));
+  };
 
   return (
     <Container>
