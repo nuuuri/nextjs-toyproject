@@ -44,7 +44,7 @@ export default function PostDetail() {
         <div>{moment(post.date).format("YY.MM.DD HH:mm:ss")}</div>
       </WriterInfo>
 
-      <PostContent>{post.content}</PostContent>
+      <PostContent dangerouslySetInnerHTML={{ __html: post.content }} />
     </Container>
   );
 }
