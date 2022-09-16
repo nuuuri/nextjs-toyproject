@@ -8,6 +8,8 @@ export default function PostWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  //
+  const userId = 123;
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value);
@@ -16,7 +18,6 @@ export default function PostWrite() {
   const submit = async () => {
     if (loading) return;
 
-    const userId = 123;
     const data = { userId, title, content };
     setLoading(true);
 
@@ -24,7 +25,13 @@ export default function PostWrite() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
-    }).then(() => router.push("/post"));
+    }).then((res) => {
+      setLoading(false);
+
+      if (res.status === 200) {
+        router.push("/post");
+      }
+    });
   };
 
   return (
