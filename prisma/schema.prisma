@@ -1,19 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model User {
   id    Int     @id @default(autoincrement())
   name  String
-  email String? @unique
+  email String?
   posts Post[]
 }
 
@@ -24,5 +23,5 @@ model Post {
   user    User     @relation(fields: [userId], references: [id])
   userId  Int
   date    DateTime @default(now())
-  look    Int
+  look    Int      @default(0)
 }
