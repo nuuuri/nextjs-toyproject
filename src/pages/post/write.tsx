@@ -35,9 +35,18 @@ export default function PostWrite() {
         placeholder="제목을 입력하세요."
       />
       <ToastEditor width="80%" onChange={setContent} />
-      {/*   <button>취소</button>
-      <button>미리보기</button> */}
-      <button onClick={submit}>등록</button>
+
+      <Footer>
+        <div>
+          <button onClick={() => router.push("/post")}>취소</button>
+        </div>
+        <div>
+          <button>미리보기</button>
+          <button className="btn_submit" onClick={submit}>
+            등록
+          </button>
+        </div>
+      </Footer>
     </Container>
   );
 }
@@ -54,7 +63,22 @@ const Container = styled.div`
 const PostTitle = styled.input`
   width: 80%;
   height: 40px;
+  margin: 20px 0 5px 0;
   border: none;
   border-bottom: 2px solid #e2e2e2;
+  color: #333333;
   font-size: 17px;
+  :focus {
+    outline: none;
+  }
+`;
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 10px;
+
+  .btn_submit {
+    margin-left: 3px;
+  }
 `;
