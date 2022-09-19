@@ -2,12 +2,14 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Modal from "components/modal";
 
 export default function PostWrite() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   //
   const userId = 123;
 
@@ -45,7 +47,7 @@ export default function PostWrite() {
 
       <Footer>
         <div>
-          <button onClick={() => router.push("/post")}>취소</button>
+          <button onClick={() => setIsModalOpen(true)}>취소</button>
         </div>
         <div>
           <button>미리보기</button>
@@ -54,6 +56,17 @@ export default function PostWrite() {
           </button>
         </div>
       </Footer>
+
+      <Modal
+        type="stop"
+        isOpen={isModalOpen}
+        closeFunc={() => setIsModalOpen(false)}
+        nextFunc={() => router.push("/post")}
+        mainMessage="게시글 작성을 취소할까요?"
+        subMessage={
+          "게시글 작성을 취소하면,\n 지금 작성한 내용은 모두 삭제돼요."
+        }
+      />
     </Container>
   );
 }
